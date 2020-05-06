@@ -28,15 +28,15 @@ void keyPressed() {
       break;
 
       case 'd':
-        alphaMultiplier = 2;
+        alphaMultiplier = 15;
         println("alphaMultiplier", alphaMultiplier);
         break;
       case 'f':
-        alphaMultiplier = 40;
+        alphaMultiplier = 45;
         println("alphaMultiplier", alphaMultiplier);
         break;
       case 'g':
-        alphaMultiplier = 254;
+        alphaMultiplier = 250;
         println("alphaMultiplier", alphaMultiplier);
         break;
         
