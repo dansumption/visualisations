@@ -71,13 +71,14 @@ void keyPressed() {
         println("defaultVelocity", defaultVelocity);
         break;
       case 'b':
-        defaultVelocity = 10;
+        defaultVelocity = 5;
         println("defaultVelocity", defaultVelocity);
         break;
       case 'n':
-        defaultVelocity = 10;
+        defaultVelocity = 15;
         println("defaultVelocity", defaultVelocity);
         break;
+        
       case '\'':
         fillIn = false;
         println("fillIn", fillIn);
