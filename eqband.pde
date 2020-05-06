@@ -1,9 +1,9 @@
-float smooth_factor = 0.9;
-float spikeMultiplier = 70;
-float alphaMultiplier = 47;
-float spikeRadius = 23;
-float bodyRadius = 10;
-float defaultVelocity = 10;
+float smoothFactor = 0.95;
+float spikeMultiplier = 75;
+float alphaMultiplier = 50;
+float spikeRadius = 5;
+float bodyRadius = 5;
+float defaultVelocity = 5;
 boolean fillIn = true;
 boolean spiky = false;
 
@@ -51,8 +51,8 @@ class EQBand {
 
   
   void update(float level){
-    this.spike = 1; //(float)Math.pow((level - this.intensity), 2);
-    this.intensity = level + (this.intensity - level) * smooth_factor;
+    this.spike = (float)Math.pow((level - this.intensity), 2) + 1;
+    this.intensity = level + (this.intensity - level) * smoothFactor;
     if (random(0, 1) > 0.9) {
       this.vector.add(randomVector()).normalize();
     }
@@ -96,7 +96,11 @@ class EQBand {
     
     pushMatrix();
     translate(round(this.position.x), round(this.position.y));
-    drawBubbly(spikeCount, innerRadius, outerRadius);
+    if (spiky) {
+      drawSpiky(spikeCount, innerRadius, outerRadius);
+    } else {
+      drawBubbly(spikeCount, innerRadius, outerRadius);
+    }
     popMatrix();
   }
 

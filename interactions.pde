@@ -19,11 +19,11 @@ void keyPressed() {
       println("Spikes", spikeMultiplier);
       break;
     case 'r':
-      spikeMultiplier = 100;
+      spikeMultiplier = 75;
       println("Spikes", spikeMultiplier);
       break;
     case 't':
-      spikeMultiplier = 500;
+      spikeMultiplier = 150;
       println("Spikes", spikeMultiplier);
       break;
 
@@ -78,7 +78,16 @@ void keyPressed() {
         defaultVelocity = 15;
         println("defaultVelocity", defaultVelocity);
         break;
-        
+
+      case 'z':
+        smoothFactor = 0.999;
+        break;
+      case 'x':
+        smoothFactor = 0.95;
+        break;
+      case 'c':
+        smoothFactor = 0.5;
+
       case '\'':
         fillIn = false;
         println("fillIn", fillIn);
