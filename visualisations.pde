@@ -5,7 +5,7 @@ void draw() {
 
   fft.analyze();
   for (int i = 0; i < numBands; i++) {
-    eqbands[i].update(fft.spectrum[i]);
+    eqbands[i].update(fft.spectrum[i] * 3);
     eqbands[i].draw();
   }
 }
