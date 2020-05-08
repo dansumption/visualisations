@@ -1,11 +1,22 @@
-float smoothFactor = 0.95;
-float spikeMultiplier = 75;
-float alphaMultiplier = 50;
-float spikeRadius = 5;
-float bodyRadius = 5;
-float defaultVelocity = 5;
-boolean fillIn = true;
-boolean spiky = false;
+
+int numBands = 4;
+float initialSmoothFactor = 0.95;
+float initialSpikeMultiplier = 65;
+float initialAlphaMultiplier = 55;
+float initialSpikeRadius = 5;
+float initialBodyRadius = 4;
+float initialDefaultVelocity = 8;
+float initialBeatMultiplier = 5.5;
+
+float smoothFactor = initialSmoothFactor;
+float spikeMultiplier = initialSpikeMultiplier;
+float alphaMultiplier = initialAlphaMultiplier;
+float spikeRadius = initialSpikeRadius;
+float bodyRadius = initialBodyRadius;
+float defaultVelocity = initialDefaultVelocity;
+boolean fillIn = false;
+boolean spiky = true;
+float beatMultiplier = initialBeatMultiplier;
 
 color[][] palettes = {
   {#461220, #590B3A, #B87333, #05083D, #122406},
@@ -14,10 +25,10 @@ color[][] palettes = {
   {#2d00f7, #6a00f4, #8900f2, #a100f2, #b100e8, #bc00dd, #d100d1, #db00b6, #e500a4, #f20089},
   {#09f04a, #12ffd1, #0cbcff, #540fff, #cb0eff, #ff0ebc, #ff510b, #ffca09},
   {#1e150a, #734729, #4f130d, #4f130d, #281009, #412410, #1e150a, #4f130d, #734729},
-  {#ffffff, #000000, #0000ff}
+  {#ffffff, #000000, #0000ff},
+  {#ffffff, #000000}
 };
 
-int numBands = 128;
 EQBand[] eqbands = new EQBand[numBands];
 
 class EQBand {
@@ -28,6 +39,8 @@ class EQBand {
   int index;
   float spike;
   color colour;
+  float[] levels = new float[50];
+  boolean beat = false;
 
   EQBand(int i) {
     this.index = i;
@@ -40,37 +53,41 @@ class EQBand {
   void setColour(int set) {
     println("Set colour", set);
     if (set == 0 || palettes.length < set) {
-
         this.colour = color(this.index % 2 == 0 ? 0 : 255);
+        int red = int(random(0, 100));
+        int green = red + int(random(50, 150));
+        this.colour = color(red, green, 0);
     }
     else {
         set--;
         this.colour = palettes[set][int(random(0, palettes[set].length))];
     }
-  }
+  } 
 
   
   void update(float level){
-    this.spike = (float)Math.pow((level - this.intensity), 2) + 1;
+    this.spike = (float)Math.pow((level - this.intensity), 4) + 1;
+    float averageLevel = updateLevels(level);
+    this.beat = (averageLevel > level*beatMultiplier);
     this.intensity = level + (this.intensity - level) * smoothFactor;
     if (random(0, 1) > 0.9) {
       this.vector.add(randomVector()).normalize();
     }
     
-    PVector effectiveVector = this.vector.copy().mult(this.intensity * defaultVelocity);
+    PVector effectiveVector = this.vector.copy().mult(this.intensity * defaultVelocity * (beat ? 4 : 0.05));
    
     this.position.add(effectiveVector);
     
     if (this.x() < 0 || this.x() > width) {
       this.position.x -= effectiveVector.x;
-      this.vector.x *= -1;
+      this.vector.x *= -0.7;
       this.vector.y *= random(0, 0.2) - 0.1;
     }
     
     if (this.y() < 0 || this.y() > height) {
       this.position.y -= effectiveVector.y;
-      this.vector.y *= -1;
-      this.vector.x *= random(0, 0.2) - 0.1;
+      this.vector.y *= -0.7;
+      this.vector.x *= random(0, 1) - 0.5;
     }
   }
   
@@ -80,28 +97,38 @@ class EQBand {
 
   
   void draw() {
-    color blobColour = color(red(colour), green(colour), blue(colour), int(intensity * alphaMultiplier) + 1);
-    if (fillIn) {
-      noStroke();
-      fill(blobColour);
-    } else {
-    strokeWeight(1);
-    stroke(blobColour);
-    noFill();
-    }
+    if (intensity > 0) {
+      color blobColour = color(red(colour), green(colour), blue(colour), int(intensity/2 * alphaMultiplier) + 1);
+      if (fillIn) {
+        noStroke();
+        fill(blobColour);
+      } else {
+      strokeWeight(1);
+      stroke(blobColour);
+      noFill();
+      }
 
-    int spikeCount = round(this.intensity * spikeMultiplier + 3);
-    float innerRadius = this.intensity * bodyRadius;
-    float outerRadius = innerRadius * (1 + this.intensity * spike * spikeRadius);
-    
-    pushMatrix();
-    translate(round(this.position.x), round(this.position.y));
-    if (spiky) {
-      drawSpiky(spikeCount, innerRadius, outerRadius);
-    } else {
-      drawBubbly(spikeCount, innerRadius, outerRadius);
+      int spikeCount = round(this.intensity * spikeMultiplier + 3);
+      float innerRadius = bodyRadius * (1 + this.intensity) * spike;
+      float outerRadius = spikeRadius * innerRadius * (1 + this.intensity) * (this.beat ? 10 : 0.1);
+
+      PVector shakenPosition = this.position.copy()
+        .add(
+          vector.copy()
+          .normalize()
+          .rotate(radians(90))
+          .mult(random(0, 1) - 0.5 * intensity * 10)
+        );
+      
+      pushMatrix();
+      translate(round(shakenPosition.x), round(shakenPosition.y));
+      if (spiky) {
+        drawSpiky(spikeCount, innerRadius, outerRadius);
+      } else {
+        drawBubbly(spikeCount, innerRadius, outerRadius);
+      }
+      popMatrix();
     }
-    popMatrix();
   }
 
   void drawSpiky(int spikeCount, float innerRadius, float outerRadius) {
@@ -125,6 +152,21 @@ class EQBand {
       );
 
   }
+
+  
+  float updateLevels(float newValue) {
+    float sum = 0;
+    for (int i = 0; i < levels.length; i++) {
+      sum += levels[i];
+      if (i < levels.length - 1) {
+        levels[i] = levels[i+1];
+      }
+    }
+    float average = sum/levels.length;
+    levels[levels.length - 1] = newValue;
+    return average;
+  }
+
   
   float x() {
     return this.position.x;

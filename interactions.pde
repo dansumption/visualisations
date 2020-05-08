@@ -4,7 +4,10 @@ void keyPressed() {
     case '\n':
       sample.cue(0);
       sample.play();
-      break;  
+      break;
+    case ' ':
+      sample.pause();
+      break;
     case '\b':
       background(bg);
       break;
@@ -14,79 +17,97 @@ void keyPressed() {
     case ',':
       sample.jump(sample.position() - 60);
       break;
+
+    case 'q':
+      spikeMultiplier *= 0.8;
+      println("Spikes", spikeMultiplier);
+      break;
+    case 'w':
+      spikeMultiplier = initialSpikeMultiplier;
+      println("Spikes", spikeMultiplier);
+      break;
     case 'e':
-      spikeMultiplier = 5;
-      println("Spikes", spikeMultiplier);
-      break;
-    case 'r':
-      spikeMultiplier = 75;
-      println("Spikes", spikeMultiplier);
-      break;
-    case 't':
-      spikeMultiplier = 150;
+      spikeMultiplier *= 1.2;
       println("Spikes", spikeMultiplier);
       break;
 
+      case 'a':
+        alphaMultiplier *= 0.8;
+        println("alphaMultiplier", alphaMultiplier);
+        break;
+      case 's':
+        alphaMultiplier = initialAlphaMultiplier;
+        println("alphaMultiplier", alphaMultiplier);
+        break;
       case 'd':
-        alphaMultiplier = 15;
-        println("alphaMultiplier", alphaMultiplier);
-        break;
-      case 'f':
-        alphaMultiplier = 45;
-        println("alphaMultiplier", alphaMultiplier);
-        break;
-      case 'g':
-        alphaMultiplier = 250;
+        alphaMultiplier *= 1.2;
         println("alphaMultiplier", alphaMultiplier);
         break;
         
       case 'u':
-        spikeRadius = 3;
+        spikeRadius *= 0.8;
         println("spikeRadius", spikeRadius);
         break;
       case 'i':
-        spikeRadius = 23;
+        spikeRadius = initialSpikeRadius;
         println("spikeRadius", spikeRadius);
         break;
       case 'o':
-        spikeRadius = 99;
+        spikeRadius *= 1.2;
         println("spikeRadius", spikeRadius);
         break;
 
       case 'j':
-        bodyRadius = 1;
+        bodyRadius *= 0.8;
         println("bodyRadius", bodyRadius);
         break;
       case 'k':
-        bodyRadius = 5;
+        bodyRadius = initialBodyRadius;
         println("bodyRadius", bodyRadius);
         break;
       case 'l':
-        bodyRadius = 15;
+        bodyRadius *= 1.2;
         println("bodyRadius", bodyRadius);
         break;
 
       case 'v':
-        defaultVelocity = 0.5;
+        defaultVelocity *= 0.8;
         println("defaultVelocity", defaultVelocity);
         break;
       case 'b':
-        defaultVelocity = 5;
+        defaultVelocity = initialDefaultVelocity;
         println("defaultVelocity", defaultVelocity);
         break;
       case 'n':
-        defaultVelocity = 15;
+        defaultVelocity *= 1.2;
         println("defaultVelocity", defaultVelocity);
         break;
 
       case 'z':
-        smoothFactor = 0.999;
+        smoothFactor *= 0.8;
+        println("smoothFactor", smoothFactor);
         break;
       case 'x':
-        smoothFactor = 0.95;
+        smoothFactor = initialSmoothFactor;
+        println("smoothFactor", smoothFactor);
         break;
       case 'c':
-        smoothFactor = 0.5;
+        smoothFactor *= 1.2;
+        println("smoothFactor", smoothFactor);
+        break;
+
+      case 'f':
+        beatMultiplier *= 0.8;
+        println("beatMultiplier", beatMultiplier);
+        break;
+      case 'g':
+        beatMultiplier = initialBeatMultiplier;
+        println("beatMultiplier", beatMultiplier);
+        break;
+      case 'h':
+        beatMultiplier *= 1.2;
+        println("beatMultiplier", beatMultiplier);
+        break;
 
       case '\'':
         fillIn = false;
@@ -99,9 +120,11 @@ void keyPressed() {
       
       case '[':
         spiky = false;
+        println("bubbly");
         break;
       case ']':
         spiky = true;
+        println("spiky");
         break;      
 
       case '0':
