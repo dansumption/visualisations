@@ -1,6 +1,6 @@
-String path = "./audio/";
+String path = "./floral/";
 String file = path + 
-"dawnchorus3.wav";
+"Floral - Floral LP - 06 This Year.mp3";
 // "09 Headache.mp3";
 // "Cosmo Sheldrake - Nightingale Wake Up Call - 01 Nightingale Wake Up Call (Part 1).mp3";
 // "TORAX.wav";

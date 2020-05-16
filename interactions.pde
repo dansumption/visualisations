@@ -145,5 +145,5 @@ void keyPressed() {
 }
 
 void mousePressed() {
-  setVectors(new PVector(mouseX, mouseY));
+  // setVectors(new PVector(mouseX, mouseY));
 }

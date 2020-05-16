@@ -1,12 +1,12 @@
 
-int numBands = 4;
+int numBands = 64;
 float initialSmoothFactor = 0.95;
 float initialSpikeMultiplier = 65;
-float initialAlphaMultiplier = 55;
-float initialSpikeRadius = 5;
-float initialBodyRadius = 4;
-float initialDefaultVelocity = 8;
-float initialBeatMultiplier = 5.5;
+float initialAlphaMultiplier = 30;
+float initialSpikeRadius = 20;
+float initialBodyRadius = 10;
+float initialDefaultVelocity = 12;
+float initialBeatMultiplier = 2;
 
 float smoothFactor = initialSmoothFactor;
 float spikeMultiplier = initialSpikeMultiplier;
@@ -54,9 +54,9 @@ class EQBand {
     println("Set colour", set);
     if (set == 0 || palettes.length < set) {
         this.colour = color(this.index % 2 == 0 ? 0 : 255);
-        int red = int(random(0, 100));
-        int green = red + int(random(50, 150));
-        this.colour = color(red, green, 0);
+        // int red = int(random(0, 100));
+        // int green = red + int(random(50, 150));
+        // this.colour = color(red, green, 0);
     }
     else {
         set--;
